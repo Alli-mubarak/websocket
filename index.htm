@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Socket Testing</title>
+</head>
+<body>
+    <h1>Testing WebSocket</h1>
+    <form action="" id="msg-form">
+        <textarea name="text" id="message" placeholder="type message here!"></textarea>
+        <button type="submit">Send Message</button>
+    </form>
+    <div id="messages"></div>
+    <script>
+        const messagesBox = document.getElementById('messages');
+        const msgForm = document.getElementById('msg-form');
+        const socket = new WebSocket("ws://localhost:5640");
+
+        socket.onopen = () =>{
+            console.log('Connected to Server');
+        }
+        socket.onmessage = (event) => {
+            console.log('Message:', event.data);
+            const p = document.createElement('p');
+            p.textContent = event.data;
+            messagesBox.appendChild(p);
+        }
+        // socket.send('Hello from Admin');
+        msgForm.onsubmit = (e) => {
+            e.preventDefault();
+            const txt = msgForm.message.value;
+            socket.send(txt);
+        }
+    </script>
+</body>
+</html>
